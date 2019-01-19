@@ -2,16 +2,29 @@
 
 cd ./
 
-if [ ! -f ".env" ]; then
+echo "-----------------------------------------------------";
+echo "--- Welcome to the Docker Database Restore System ---";
+echo "-----------------------------------------------------";
+
+echo "Tell me .env name and press [ENTER]:";
+read ENV_NAME
+if [ "${ENV_NAME}" == "" ]
+then
+    echo "Empty .env name given";
+    exit 1;
+fi
+
+if [ ! -f "${ENV_NAME}.env" ]; then
     echo "-----------------------------------------------------";
-    echo "[ERROR] .env file not found";
+    echo "[ERROR] ${ENV_NAME}.env file not found";
     echo "-----------------------------------------------------";
     exit 1;
 fi
 
-export $(egrep -v '^#' .env | xargs)
+export $(egrep -v '^#' ${ENV_NAME}.env | xargs)
 
-if [ -z "${DUMP_DIR}" ] || [ -z "${MYSQL_USER}" ] || [ -z "${MYSQL_PASSWORD}" ]
+
+if [ -z "${DUMP_DIR}" ] || [ -z "${MYSQL_USER}" ] || [ -z "${MYSQL_PASSWORD}" ] || [ -z "${DATABASE_CONTAINER_NAME}" ] || [ -z "${MYSQL_DATABASE_NAME}" ]
 then
     echo "-----------------------------------------------------";
     echo "[ERROR] Some .env values is missing or wrong";
@@ -20,26 +33,9 @@ then
 fi
 
 echo "-----------------------------------------------------";
-echo "--- Welcome to the Docker Database Restore System ---";
+echo "Using ${ENV_NAME}.env";
 echo "-----------------------------------------------------";
 
-echo "Tell me the Docker container name and press [ENTER]:";
-read DATABASE_CONTAINER_NAME
-if [ "${DATABASE_CONTAINER_NAME}" == "" ]
-then
-    echo "Empty Docker container name given";
-    exit 1;
-fi
-
-echo "Tell me the MySQL database name and press [ENTER]:";
-read MYSQL_DATABASE_NAME
-if [ "${MYSQL_DATABASE_NAME}" == "" ]
-then
-    echo "Empty database name given";
-    exit 1;
-fi
-
-echo "-----------------------------------------------------";
 echo "Choose a gzipped file (*.sql.gz) to dump";
 echo "ATTENTION! All previous data will be lost!";
 echo "-----------------------------------------------------";
