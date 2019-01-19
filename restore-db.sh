@@ -6,7 +6,7 @@ echo "-----------------------------------------------------";
 echo "--- Welcome to the Docker Database Restore System ---";
 echo "-----------------------------------------------------";
 
-echo "Tell me .env name and press [ENTER]:";
+echo "Tell me the .env file name and press [ENTER]:";
 read ENV_NAME
 if [ "${ENV_NAME}" == "" ]
 then
